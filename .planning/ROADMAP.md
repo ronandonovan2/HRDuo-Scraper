@@ -40,10 +40,10 @@ Plans:
   1. The careers page fetches jobs.json and renders one card per job showing title, type, short description, and an Apply Now button
   2. Clicking Apply Now on any card opens the correct HR Duo application page for that specific role
   3. When jobs.json contains no jobs, the careers page displays "No open roles at this time" instead of an empty section
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 02-01: Add JavaScript snippet to WordPress careers page that fetches jobs.json and renders job cards
+- [ ] 02-01-PLAN.md — Build self-contained HTML/CSS/JS snippet that fetches jobs.json and renders job cards on WordPress careers page
 
 ## Progress
 
