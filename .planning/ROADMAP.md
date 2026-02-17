@@ -26,11 +26,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. GitHub Actions runs the scraper on a daily cron schedule without manual intervention
   3. jobs.json is publicly accessible at a stable URL after each run
   4. If HR Duo returns zero jobs (downtime or error), the existing jobs.json is preserved and no empty file is published
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 01-01: Build Playwright scraper that loads HR Duo SPA and extracts job data to jobs.json
-- [ ] 01-02: Set up GitHub Actions workflow to run scraper daily and publish jobs.json
+- [ ] 01-01-PLAN.md — Build Playwright scraper with configurable selectors, data validation, and jobs.json output
+- [ ] 01-02-PLAN.md — Create GitHub Actions workflow for daily scraping and auto-commit of jobs.json
 
 ### Phase 2: Careers Page Display
 **Goal**: Visitors to croommedical.com/careers see current HR Duo job listings as cards with working Apply Now links
