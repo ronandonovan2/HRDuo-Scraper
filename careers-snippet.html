@@ -1,0 +1,177 @@
+<style>
+  #croom-careers {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    box-sizing: border-box;
+  }
+
+  #croom-careers *,
+  #croom-careers *::before,
+  #croom-careers *::after {
+    box-sizing: inherit;
+  }
+
+  #croom-careers .croom-jobs-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 0;
+    margin: 0;
+  }
+
+  @media (min-width: 768px) {
+    #croom-careers .croom-jobs-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    #croom-careers .croom-jobs-grid {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+  }
+
+  #croom-careers .croom-job-card {
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.2s ease;
+  }
+
+  #croom-careers .croom-job-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  #croom-careers .croom-job-title {
+    font-size: 1.2em;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 10px 0;
+  }
+
+  #croom-careers .croom-job-type {
+    display: inline-block;
+    font-size: 0.8em;
+    color: #666666;
+    background: #f0f0f0;
+    border-radius: 4px;
+    padding: 3px 8px;
+    margin: 0 0 14px 0;
+  }
+
+  #croom-careers .croom-job-description {
+    font-size: 0.95em;
+    color: #444444;
+    margin: 0 0 20px 0;
+    flex-grow: 1;
+  }
+
+  #croom-careers .croom-apply-btn {
+    display: block;
+    width: 100%;
+    background: #00843D;
+    color: #ffffff;
+    text-align: center;
+    text-decoration: none;
+    padding: 10px 24px;
+    border-radius: 4px;
+    font-size: 0.95em;
+    font-weight: 600;
+    margin-top: auto;
+    transition: background 0.2s ease;
+  }
+
+  #croom-careers .croom-apply-btn:hover {
+    background: #006b31;
+    color: #ffffff;
+    text-decoration: none;
+  }
+
+  #croom-careers .croom-state-message {
+    text-align: center;
+    color: #888888;
+    padding: 40px 20px;
+    font-size: 1em;
+  }
+</style>
+
+<div id="croom-careers"></div>
+
+<script>
+(function () {
+  var JOBS_URL = 'https://raw.githubusercontent.com/ronandonovan2/HRDuo-Scraper/main/data/jobs.json';
+  var container = document.getElementById('croom-careers');
+
+  function showMessage(text) {
+    var p = document.createElement('p');
+    p.className = 'croom-state-message';
+    p.textContent = text;
+    container.innerHTML = '';
+    container.appendChild(p);
+  }
+
+  function renderJobs(jobs) {
+    container.innerHTML = '';
+
+    if (jobs.length === 0) {
+      showMessage('No open roles at this time \u2014 please check back soon.');
+      return;
+    }
+
+    var grid = document.createElement('div');
+    grid.className = 'croom-jobs-grid';
+
+    for (var i = 0; i < jobs.length; i++) {
+      var job = jobs[i];
+
+      var card = document.createElement('div');
+      card.className = 'croom-job-card';
+
+      var title = document.createElement('h3');
+      title.className = 'croom-job-title';
+      title.textContent = job.title;
+
+      var type = document.createElement('span');
+      type.className = 'croom-job-type';
+      type.textContent = job.type;
+
+      var description = document.createElement('p');
+      description.className = 'croom-job-description';
+      description.textContent = job.description;
+
+      var applyBtn = document.createElement('a');
+      applyBtn.className = 'croom-apply-btn';
+      applyBtn.href = job.applyUrl;
+      applyBtn.target = '_blank';
+      applyBtn.rel = 'noopener noreferrer';
+      applyBtn.textContent = 'Apply Now';
+
+      card.appendChild(title);
+      card.appendChild(type);
+      card.appendChild(description);
+      card.appendChild(applyBtn);
+      grid.appendChild(card);
+    }
+
+    container.appendChild(grid);
+  }
+
+  showMessage('Loading open positions\u2026');
+
+  fetch(JOBS_URL + '?t=' + Date.now())
+    .then(function (response) {
+      if (!response.ok) {
+        throw new Error('HTTP ' + response.status);
+      }
+      return response.json();
+    })
+    .then(function (jobs) {
+      renderJobs(jobs);
+    })
+    .catch(function () {
+      showMessage('Unable to load job listings. Please try again later.');
+    });
+})();
+</script>
