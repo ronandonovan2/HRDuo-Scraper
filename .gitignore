@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Environment variables — never commit secrets
+.env
+
+# Playwright browser binaries (downloaded via npx playwright install)
+# Stored in AppData/Local/ms-playwright on Windows, ~/.cache/ms-playwright on Linux/Mac
+# Do not commit these — they are large and platform-specific
+
+# Output data (committed separately when needed)
+# data/jobs.json  # Uncomment to exclude output file from git
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
