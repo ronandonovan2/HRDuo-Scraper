@@ -5,34 +5,30 @@
 See: .planning/PROJECT.md (updated 2026-02-17)
 
 **Core value:** Open roles posted in HR Duo automatically appear on croommedical.com/careers with working apply links back to HR Duo — no manual data entry.
-**Current focus:** Phase 2 - Careers Page
+**Current focus:** Milestone complete
 
 ## Current Position
 
-Phase: 2 of 2 (Careers Page)
-Plan: 1 of 2 in current phase (paused at Task 2 checkpoint)
-Status: 02-01 Task 1 complete — careers-snippet.html built and committed. Paused at Task 2: human verification (paste into WordPress)
-Last activity: 2026-02-17 — careers-snippet.html created (c2ab65f)
+Phase: 2 of 2 (Careers Page) — COMPLETE
+Plan: 1 of 1 complete
+Status: All phases complete — milestone delivered
+Last activity: 2026-02-17 — Phase 2 verified live on croommedical.com/careers
 
-Progress: [■■■■■■░░░░] 60%
+Progress: [■■■■■■■■■■] 100%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 2 (Phase 1 complete)
-- Average duration: ~17min/plan
-- Total execution time: ~35min
+- Total plans completed: 3 (all phases complete)
+- Average duration: ~15min/plan
+- Total execution time: ~45min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-scraper-pipeline | 2/2 complete ✓ | ~35min | ~17min |
-| 02-careers-page-display | 0/2 complete (1 in progress) | - | - |
-
-**Recent Trend:**
-- Last 5 plans: -
-- Trend: -
+| 02-careers-page-display | 1/1 complete ✓ | ~10min | ~10min |
 
 *Updated after each plan completion*
 
@@ -54,23 +50,21 @@ Recent decisions affecting current work:
 - 01-02: Chromium-only install — reduces CI time, only browser needed for HR Duo scraping
 - 01-02: [skip ci] in auto-commit message prevents recursive workflow trigger
 - 01-02: git diff --cached --quiet makes workflow idempotent — skips commit if jobs.json unchanged
-- 02-01: Cache-busting ?t=Date.now() on fetch URL — ensures visitors get latest jobs.json, not stale CDN cache
-- 02-01: IIFE wrapper for JS — prevents variable leaking into WordPress global scope
+- 02-01: Integrated into existing Open Roles ACF block (inc/blocks/open_roles.php) — replaced legacy Indeedly plugin
+- 02-01: GitHub repo made public — required for browser fetch() to access raw.githubusercontent.com URL
+- 02-01: Cache-busting ?t=Date.now() on fetch URL — ensures visitors always get latest jobs.json
 - 02-01: CSS scoped under #croom-careers — avoids conflicts with Croom Medical WordPress theme
-- 02-01: textContent (not innerHTML) for job data — XSS prevention if jobs.json data compromised
-- 02-01: Brand green #00843D for Apply Now button — matches croommedical.com primary brand color
 
 ### Pending Todos
 
-- Complete 02-01 Task 2: paste careers-snippet.html into WordPress and verify cards render with working Apply Now links
-- Execute Phase 2 Plan 02 (02-02) after WordPress verification
+None — milestone complete.
 
 ### Blockers/Concerns
 
-None — careers-snippet.html is ready to paste into WordPress. Awaiting human verification at Task 2 checkpoint.
+None — fully operational. Data pipeline runs daily via GitHub Actions. Careers page displays live HR Duo jobs.
 
 ## Session Continuity
 
 Last session: 2026-02-17
-Stopped at: 02-01 Task 2 checkpoint — paste careers-snippet.html into WordPress and verify
-Resume: After WordPress verification, type "approved" to continue to 02-02
+Stopped at: Milestone complete — all phases delivered
+Resume: Run /gsd:complete-milestone to archive this milestone

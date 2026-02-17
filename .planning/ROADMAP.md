@@ -12,8 +12,8 @@ A Playwright scraper extracts job listings from the HR Duo candidate portal SPA,
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Scraper Pipeline** - Playwright scraper extracts HR Duo jobs and publishes jobs.json via GitHub Actions daily
-- [ ] **Phase 2: Careers Page Display** - JavaScript snippet fetches jobs.json and renders job cards on the WordPress careers page
+- [x] **Phase 1: Scraper Pipeline** - Playwright scraper extracts HR Duo jobs and publishes jobs.json via GitHub Actions daily
+- [x] **Phase 2: Careers Page Display** - JavaScript snippet fetches jobs.json and renders job cards on the WordPress careers page
 
 ## Phase Details
 
@@ -29,8 +29,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 2 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Build Playwright scraper with configurable selectors, data validation, and jobs.json output
-- [ ] 01-02-PLAN.md — Create GitHub Actions workflow for daily scraping and auto-commit of jobs.json
+- [x] 01-01-PLAN.md — Build Playwright scraper with configurable selectors, data validation, and jobs.json output
+- [x] 01-02-PLAN.md — Create GitHub Actions workflow for daily scraping and auto-commit of jobs.json
 
 ### Phase 2: Careers Page Display
 **Goal**: Visitors to croommedical.com/careers see current HR Duo job listings as cards with working Apply Now links
@@ -43,7 +43,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 02-01-PLAN.md — Build self-contained HTML/CSS/JS snippet that fetches jobs.json and renders job cards on WordPress careers page
+- [x] 02-01-PLAN.md — Build self-contained HTML/CSS/JS snippet that fetches jobs.json and renders job cards on WordPress careers page
 
 ## Progress
 
@@ -52,5 +52,5 @@ Phases execute in numeric order: 1 → 2
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Scraper Pipeline | 0/2 | Not started | - |
-| 2. Careers Page Display | 0/1 | Not started | - |
+| 1. Scraper Pipeline | 2/2 | ✓ Complete | 2026-02-17 |
+| 2. Careers Page Display | 1/1 | ✓ Complete | 2026-02-17 |
