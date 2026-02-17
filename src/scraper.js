@@ -21,8 +21,10 @@ async function scrapeJobs(config) {
 
     console.log(`Navigating to HR Duo: ${config.url}`);
     try {
+      // Use 'load' instead of 'networkidle' — the SPA keeps connections open
+      // which causes networkidle to never resolve
       await page.goto(config.url, {
-        waitUntil: 'networkidle',
+        waitUntil: 'load',
         timeout: config.timeout,
       });
     } catch (navError) {
@@ -57,20 +59,44 @@ async function scrapeJobs(config) {
 
     for (const card of jobCards) {
       try {
-        // Extract title
+        // Extract title from h3 — strip the [Code: ...] span, keep only the title text
         const titleEl = await card.$(config.selectors.title);
-        const title = titleEl ? (await titleEl.textContent()).trim() : '';
+        let title = '';
+        if (titleEl) {
+          title = await titleEl.evaluate(el => {
+            // Get text from child nodes, excluding the .job-code span
+            let text = '';
+            for (const node of el.childNodes) {
+              if (node.nodeType === Node.TEXT_NODE) {
+                text += node.textContent;
+              }
+            }
+            return text.trim();
+          });
+        }
 
-        // Extract type / category
-        const typeEl = await card.$(config.selectors.type);
-        const type = typeEl ? (await typeEl.textContent()).trim() : '';
+        // Extract detail rows (Location, Department, Job Type, Positions)
+        const detailRows = await card.$$(config.selectors.detailRow);
+        const details = {};
+        for (const row of detailRows) {
+          const label = await row.$('.job-detail-label');
+          if (label) {
+            const key = (await label.textContent()).replace(':', '').trim();
+            // The value is the second span (sibling of the label)
+            const val = await row.evaluate(el => {
+              const spans = el.querySelectorAll('span');
+              return spans.length > 1 ? spans[1].textContent.trim() : '';
+            });
+            details[key] = val;
+          }
+        }
 
-        // Extract description (truncate to 200 chars to avoid duplicating too much HR Duo content)
-        const descEl = await card.$(config.selectors.description);
-        const rawDescription = descEl ? (await descEl.textContent()).trim() : '';
-        const description = rawDescription.length > 200
-          ? rawDescription.slice(0, 197) + '...'
-          : rawDescription;
+        const type = details['Job Type'] || '';
+        // Build description from available card details (no description on listing page)
+        const descParts = [];
+        if (details['Location']) descParts.push(details['Location']);
+        if (details['Department']) descParts.push(details['Department']);
+        const description = descParts.join(' — ');
 
         // Extract apply URL — resolve relative URLs against the base
         const applyEl = await card.$(config.selectors.applyLink);
@@ -78,7 +104,6 @@ async function scrapeJobs(config) {
         if (applyEl) {
           const href = await applyEl.getAttribute('href');
           if (href) {
-            // Resolve relative paths against the base URL
             applyUrl = href.startsWith('http')
               ? href
               : new URL(href, config.url).href;

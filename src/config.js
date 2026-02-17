@@ -3,35 +3,26 @@
 /**
  * Scraper configuration for the HR Duo candidate portal.
  *
- * Selectors are best-guess defaults based on common SPA job board patterns.
- * HR Duo was in maintenance during initial build — update selectors after
- * inspecting the live DOM with DevTools.
- *
- * To update selectors:
- *   1. Open https://my.hrduo.com/candidate-jobs/Croom_Medical in Chrome
- *   2. Right-click a job card -> Inspect
- *   3. Find stable selectors (prefer data-* attributes over CSS class hashes)
- *   4. Update the values below and re-run `npm run scrape`
+ * Selectors verified against live DOM (2026-02-17).
+ * HR Duo uses a Vue SPA with Bulma CSS — cards use .custom-job-card class,
+ * detail rows use .job-details-row with .job-detail-label spans.
  */
 const config = {
   /** Public HR Duo candidate portal URL for Croom Medical */
   url: 'https://my.hrduo.com/candidate-jobs/Croom_Medical',
 
   selectors: {
-    /** Container element wrapping a single job listing */
-    jobCard: '.job-card', // TODO: verify selector against live page (fallback: '[class*="job"]')
+    /** Container element wrapping a single job listing (Vue component with custom-job-card class) */
+    jobCard: '.custom-job-card',
 
-    /** Job title element inside a job card */
-    title: 'h2, h3, [class*="title"]', // TODO: verify selector against live page
+    /** Job title — h3 inside card-header; text node only (excludes .job-code span) */
+    title: 'h3.title',
 
-    /** Job type / employment category element inside a job card */
-    type: '[class*="type"], [class*="category"]', // TODO: verify selector against live page
+    /** Job detail rows inside .card-content — each row has a .job-detail-label and a value span */
+    detailRow: '.job-details-row',
 
-    /** Job description or summary element inside a job card */
-    description: '[class*="description"], [class*="summary"], p', // TODO: verify selector against live page
-
-    /** "Apply" link element inside a job card — href must contain the job UUID */
-    applyLink: 'a[href*="candidate-jobs"]', // TODO: verify selector against live page
+    /** Apply/View Job link in card footer */
+    applyLink: 'a.card-footer-item',
   },
 
   /** Maximum milliseconds to wait for job cards to appear after page load */
