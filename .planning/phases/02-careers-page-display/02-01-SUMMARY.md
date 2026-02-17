@@ -53,7 +53,7 @@ completed: 2026-02-17
 - **Duration:** ~5 min
 - **Started:** 2026-02-17T09:45:41Z
 - **Completed:** 2026-02-17T09:50:00Z (Task 1 complete; Task 2 checkpoint paused for human verification)
-- **Tasks:** 1 of 2 complete (Task 2 is human-verify checkpoint — awaiting WordPress paste)
+- **Tasks:** 2 of 2 complete
 - **Files modified:** 1 created
 
 ## Accomplishments
@@ -71,7 +71,7 @@ Each task was committed atomically:
 
 1. **Task 1: Build self-contained careers page snippet** - `c2ab65f` (feat)
 
-2. **Task 2: Verify snippet on WordPress careers page** — checkpoint pending human verification
+2. **Task 2: Verify snippet on WordPress careers page** — verified live on croommedical.com/careers
 
 ## Files Created/Modified
 
@@ -95,21 +95,17 @@ None - plan executed exactly as written.
 
 None.
 
-## User Setup Required
+## Deployment Notes
 
-**WordPress paste required (Task 2 checkpoint):**
-1. Open careers-snippet.html in browser to confirm cards render (4 jobs: General Operator, Cost Accountant, Senior NPI Engineer, Senior Quality Manager (NPI))
-2. Log in to WordPress admin for croommedical.com
-3. Navigate to Careers page editor
-4. Add a Custom HTML block and paste the entire contents of careers-snippet.html
-5. Preview/publish and verify: 4 job cards appear, Apply Now buttons open correct HR Duo URLs in new tab
+- The snippet was integrated into the existing Open Roles ACF block template (`inc/blocks/open_roles.php`) in the Croom Medical WordPress theme, replacing the legacy Indeedly (Indeed) plugin integration
+- GitHub repo `ronandonovan2/HRDuo-Scraper` was made public so the raw URL is accessible to the browser fetch() call
+- Verified live on croommedical.com/careers: 4 job cards render correctly with working Apply Now links
 
 ## Next Phase Readiness
 
-- careers-snippet.html is built and committed — ready to paste into WordPress
-- Task 2 checkpoint must be completed: paste snippet into WordPress, confirm cards render and Apply Now links work
-- No further automation needed after WordPress paste — the data pipeline (Phase 1) keeps jobs.json updated automatically
+- Phase 2 complete — no further phases planned
+- The data pipeline (Phase 1 GitHub Actions) keeps jobs.json updated automatically every day
 
 ---
 *Phase: 02-careers-page-display*
-*Completed: 2026-02-17 (Task 1 only — Task 2 pending human verification)*
+*Completed: 2026-02-17*
