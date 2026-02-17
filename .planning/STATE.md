@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-02-17)
 ## Current Position
 
 Phase: 2 of 2 (Careers Page)
-Plan: 0 of 2 in current phase (not yet started)
-Status: Phase 1 complete — ready to execute Phase 2
-Last activity: 2026-02-17 — Phase 1 complete (both plans verified)
+Plan: 1 of 2 in current phase (paused at Task 2 checkpoint)
+Status: 02-01 Task 1 complete — careers-snippet.html built and committed. Paused at Task 2: human verification (paste into WordPress)
+Last activity: 2026-02-17 — careers-snippet.html created (c2ab65f)
 
-Progress: [■■■■■░░░░░] 50%
+Progress: [■■■■■■░░░░] 60%
 
 ## Performance Metrics
 
@@ -28,6 +28,7 @@ Progress: [■■■■■░░░░░] 50%
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-scraper-pipeline | 2/2 complete ✓ | ~35min | ~17min |
+| 02-careers-page-display | 0/2 complete (1 in progress) | - | - |
 
 **Recent Trend:**
 - Last 5 plans: -
@@ -53,17 +54,23 @@ Recent decisions affecting current work:
 - 01-02: Chromium-only install — reduces CI time, only browser needed for HR Duo scraping
 - 01-02: [skip ci] in auto-commit message prevents recursive workflow trigger
 - 01-02: git diff --cached --quiet makes workflow idempotent — skips commit if jobs.json unchanged
+- 02-01: Cache-busting ?t=Date.now() on fetch URL — ensures visitors get latest jobs.json, not stale CDN cache
+- 02-01: IIFE wrapper for JS — prevents variable leaking into WordPress global scope
+- 02-01: CSS scoped under #croom-careers — avoids conflicts with Croom Medical WordPress theme
+- 02-01: textContent (not innerHTML) for job data — XSS prevention if jobs.json data compromised
+- 02-01: Brand green #00843D for Apply Now button — matches croommedical.com primary brand color
 
 ### Pending Todos
 
-- Plan and execute Phase 2: Careers page on croommedical.com that fetches from the raw GitHub jobs.json URL
+- Complete 02-01 Task 2: paste careers-snippet.html into WordPress and verify cards render with working Apply Now links
+- Execute Phase 2 Plan 02 (02-02) after WordPress verification
 
 ### Blockers/Concerns
 
-None — Phase 1 fully operational. Data source: `https://raw.githubusercontent.com/ronandonovan2/HRDuo-Scraper/main/data/jobs.json`
+None — careers-snippet.html is ready to paste into WordPress. Awaiting human verification at Task 2 checkpoint.
 
 ## Session Continuity
 
 Last session: 2026-02-17
-Stopped at: Phase 1 complete — Phase 2 not yet planned or started
-Resume: run /gsd:plan-phase 2 to plan the careers page, then /gsd:execute-phase 2
+Stopped at: 02-01 Task 2 checkpoint — paste careers-snippet.html into WordPress and verify
+Resume: After WordPress verification, type "approved" to continue to 02-02
