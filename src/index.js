@@ -29,9 +29,9 @@ function isValidJob(job) {
 async function main() {
   console.log('=== HR Duo Job Scraper ===');
 
-  let jobs;
+  let jobs, pageLoaded;
   try {
-    jobs = await scrapeJobs(config);
+    ({ jobs, pageLoaded } = await scrapeJobs(config));
   } catch (err) {
     console.error(`ERROR: Scraper threw an unexpected error: ${err.message}`);
     process.exit(1);
@@ -52,25 +52,21 @@ async function main() {
 
   console.log(`Validation complete: ${validJobs.length} valid jobs (${jobs.length - validJobs.length} filtered out)`);
 
-  // Zero-result safety: protect existing data when scraper finds nothing
   if (validJobs.length === 0) {
-    const existingDataExists = fs.existsSync(OUTPUT_PATH);
-
-    if (existingDataExists) {
+    if (!pageLoaded) {
+      // Page failed to load — preserve existing data and signal failure so GitHub Actions alerts us
       console.warn(
-        'WARNING: Scraper found 0 valid jobs. Preserving existing jobs.json to prevent data loss.\n' +
-        'This may indicate HR Duo is in maintenance, the selectors need updating, or a scraper failure.\n' +
-        'Inspect https://my.hrduo.com/candidate-jobs/Croom_Medical manually to diagnose.'
+        'WARNING: Scraper could not load HR Duo. Preserving existing jobs.json to prevent data loss.\n' +
+        `Inspect ${config.url} manually to diagnose.`
       );
       process.exit(1);
-    } else {
-      // First run with no results — write empty array so subsequent runs have a file to check
-      console.log('No existing jobs.json found and 0 jobs scraped. Writing empty array for first run.');
-      fs.mkdirSync(path.dirname(OUTPUT_PATH), { recursive: true });
-      fs.writeFileSync(OUTPUT_PATH, JSON.stringify([], null, 2), 'utf8');
-      console.log('Wrote empty jobs.json. Re-run when HR Duo is live.');
-      process.exit(1);
     }
+
+    // Page loaded cleanly but no roles are currently posted — this is normal
+    console.log('No open roles currently posted on HR Duo. Writing empty jobs.json.');
+    fs.mkdirSync(path.dirname(OUTPUT_PATH), { recursive: true });
+    fs.writeFileSync(OUTPUT_PATH, JSON.stringify([], null, 2), 'utf8');
+    process.exit(0);
   }
 
   // Write valid jobs to data/jobs.json

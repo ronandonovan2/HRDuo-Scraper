@@ -15,6 +15,9 @@ const config = {
     /** Container element wrapping a single job listing (Vue component with custom-job-card class) */
     jobCard: '.custom-job-card',
 
+    /** Always-present element confirming the page has fully loaded (filter dropdowns) */
+    pageReady: '.select.w-100',
+
     /** Job title — h3 inside card-header; text node only (excludes .job-code span) */
     title: 'h3.title',
 

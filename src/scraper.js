@@ -9,7 +9,7 @@ const { chromium } = require('playwright');
  * @param {string} config.url - HR Duo portal URL to navigate to
  * @param {object} config.selectors - CSS selectors for job card elements
  * @param {number} config.timeout - Maximum wait time in milliseconds
- * @returns {Promise<Array<{title: string, type: string, description: string, applyUrl: string}>>}
+ * @returns {Promise<{jobs: Array<{title: string, type: string, description: string, applyUrl: string}>, pageLoaded: boolean}>}
  */
 async function scrapeJobs(config) {
   console.log('Launching browser...');
@@ -32,27 +32,30 @@ async function scrapeJobs(config) {
         `WARNING: Navigation to HR Duo timed out or failed: ${navError.message}\n` +
         'HR Duo may be in maintenance or unreachable. Returning 0 jobs.'
       );
-      return [];
+      return { jobs: [], pageLoaded: false };
     }
 
-    // Wait for job cards to appear — the SPA needs JS to finish rendering
+    // Wait for the filter dropdowns — these always render when the SPA has loaded,
+    // even when there are no open roles. This avoids a 30s timeout on empty listings.
     try {
-      await page.waitForSelector(config.selectors.jobCard, {
+      await page.waitForSelector(config.selectors.pageReady, {
         timeout: config.timeout,
       });
     } catch (waitError) {
       console.warn(
-        `WARNING: Job card selector "${config.selectors.jobCard}" not found within ${config.timeout}ms. ` +
-        'HR Duo may be in maintenance or the selector needs updating.'
+        `WARNING: Page-ready selector "${config.selectors.pageReady}" not found within ${config.timeout}ms. ` +
+        'HR Duo may be in maintenance or the page structure has changed.'
       );
-      return [];
+      return { jobs: [], pageLoaded: false };
     }
 
+    // Check for job cards — no timeout here; page is already confirmed loaded
     const jobCards = await page.$$(config.selectors.jobCard);
     console.log(`Found ${jobCards.length} job cards`);
 
     if (jobCards.length === 0) {
-      return [];
+      console.log('Page loaded successfully — no open roles currently posted.');
+      return { jobs: [], pageLoaded: true };
     }
 
     const jobs = [];
@@ -117,7 +120,7 @@ async function scrapeJobs(config) {
     }
 
     console.log(`Extraction complete — extracted ${jobs.length} jobs`);
-    return jobs;
+    return { jobs, pageLoaded: true };
   } finally {
     await browser.close();
   }
