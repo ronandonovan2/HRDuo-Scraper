@@ -49,6 +49,14 @@ async function scrapeJobs(config) {
       return { jobs: [], pageLoaded: false };
     }
 
+    // Wait for job cards to appear — the SPA renders them after the filter dropdowns
+    // If none appear within the timeout, the page has no open roles
+    try {
+      await page.waitForSelector(config.selectors.jobCard, { timeout: config.timeout });
+    } catch {
+      // No job cards rendered — legitimately no open roles
+    }
+
     // Check for job cards — no timeout here; page is already confirmed loaded
     const jobCards = await page.$$(config.selectors.jobCard);
     console.log(`Found ${jobCards.length} job cards`);
